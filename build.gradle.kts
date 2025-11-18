@@ -63,10 +63,10 @@ allprojects {
         outputDirectory.set(project.buildDir)
     }
 
-    configure<CheckstyleExtension> {
-        configFile = rootProject.file("resources/checkstyle-config.xml")
-        configDirectory.set(rootProject.file("resources"))
-    }
+    // configure<CheckstyleExtension> {
+    //     configFile = rootProject.file("resources/checkstyle-config.xml")
+    //     configDirectory.set(rootProject.file("resources"))
+    // }
 
     configure<org.eclipse.edc.plugins.edcbuild.extensions.BuildExtension> {
         versions {

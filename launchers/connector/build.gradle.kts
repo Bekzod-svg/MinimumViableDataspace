@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2020, 2021 Microsoft Corporation
+ *  Copyright (c) 2022 Bayerische Motoren Werke Aktiengesellschaft (BMW AG)
  *
  *  This program and the accompanying materials are made available under the
  *  terms of the Apache License, Version 2.0 which is available at
@@ -8,7 +8,7 @@
  *  SPDX-License-Identifier: Apache-2.0
  *
  *  Contributors:
- *       Microsoft Corporation - initial API and implementation
+ *       Bayerische Motoren Werke Aktiengesellschaft (BMW AG) - initial API and implementation
  *
  */
 
@@ -16,72 +16,82 @@ plugins {
     `java-library`
     id("application")
     alias(libs.plugins.shadow)
+    id(libs.plugins.swagger.get().pluginId)
+}
+
+dependencies {
+    implementation(libs.edc.control.api.configuration)
+    implementation(libs.edc.control.plane.api.client)
+    implementation(libs.edc.control.plane.api)
+    implementation(libs.edc.control.plane.core)
+    implementation(libs.edc.dsp)
+    implementation(libs.edc.configuration.filesystem)
+    implementation(libs.edc.management.api)
+    implementation(libs.edc.transfer.data.plane.signaling)
+    implementation(libs.edc.transfer.pull.http.receiver)
+    implementation(libs.edc.validator.data.address.http.data)
+
+    implementation(libs.edc.token.core)
+    implementation(libs.edc.http)
+    implementation(libs.edc.data.plane.iam)
+
+    implementation(libs.edc.edr.cache.api)
+    implementation(libs.edc.edr.store.core)
+    implementation(libs.edc.edr.store.receiver)
+    implementation(libs.edc.edr.index.sql)
+
+    implementation(libs.edc.data.plane.selector.api)
+    implementation(libs.edc.data.plane.selector.core)
+
+    implementation(libs.edc.data.plane.self.registration)
+    implementation(libs.edc.data.plane.signaling.api)
+    implementation(libs.edc.data.plane.public.api)
+    implementation(libs.edc.data.plane.core)
+    implementation(libs.edc.data.plane.http)
+
+    implementation(libs.edc.data.plane.aws.s3)
+
+    implementation(libs.edc.oauth2.core)
+    implementation(libs.edc.oauth2.client)
+
+    implementation(libs.edc.api.observability)
+
+    implementation(libs.edc.asset.index.sql)
+    implementation(libs.edc.contract.definition.store.sql)
+    implementation(libs.edc.contract.negotiation.store.sql)
+    implementation(libs.edc.control.plane.sql)
+    implementation(libs.edc.policy.definition.store.sql)
+    implementation(libs.edc.transfer.process.store.sql)
+    implementation(libs.edc.data.plane.store.sql)
+    implementation(libs.edc.data.plane.instance.store.sql)
+    implementation(libs.edc.accesstokendata.store.sql)
+
+    implementation(libs.edc.sql.pool.apache.commons)
+    implementation(libs.postgresql)
+    implementation(libs.edc.transaction.local)
+    implementation(libs.edc.transaction.datasource.spi)
+
+    implementation(libs.edc.fc.spi.crawler)
+    runtimeOnly(libs.edc.fc.core)
+    runtimeOnly(libs.edc.fc.api)
+    implementation(libs.edc.monitor.jdk.logger)
+    implementation(libs.edc.fc.cache.sql)
+    // implementation(project(":extensions:policies"))
+}
+
+application {
+    mainClass.set("$group.boot.system.runtime.BaseRuntime")
 }
 
 var distTar = tasks.getByName("distTar")
 var distZip = tasks.getByName("distZip")
 
-dependencies {
-    runtimeOnly(project(":extensions:refresh-catalog"))
-    runtimeOnly(project(":extensions:policies"))
-
-    runtimeOnly(libs.bundles.connector)
-    runtimeOnly(libs.edc.core.controlplane)
-    runtimeOnly(libs.edc.core.controlplane.api)
-    runtimeOnly(libs.edc.core.controlplane.api.client)
-    runtimeOnly(libs.edc.ext.api.management)
-    runtimeOnly(libs.edc.ext.api.management.config)
-    runtimeOnly(libs.edc.ext.configuration.filesystem)
-    runtimeOnly(libs.edc.ext.http)
-
-    // DSP protocol
-    runtimeOnly(libs.edc.protocol.dsp)
-
-    // API key authentication for Data Management API (also used for CORS support)
-    runtimeOnly(libs.edc.ext.auth.tokenbased)
-
-    // DID authentication
-    runtimeOnly(libs.bundles.identity)
-
-    // Blob storage container provisioning
-    runtimeOnly(libs.edc.azure.core.blob)
-    runtimeOnly(libs.edc.azure.ext.provision.blob)
-    // To use FileSystem vault e.g. -DuseFsVault="true".Only for non-production usages.
-    val useFsVault: Boolean = System.getProperty("useFsVault", "false").toBoolean()
-    if (useFsVault) {
-        runtimeOnly(libs.edc.ext.vault.filesystem)
-    } else {
-        runtimeOnly(libs.edc.azure.ext.vault)
-    }
-
-    runtimeOnly(libs.bundles.transfer.dpf)
-
-    runtimeOnly(libs.edc.core.dpf.selector)
-    runtimeOnly(libs.edc.ext.dpf.selector.api)
-
-    // Embedded DPF
-    runtimeOnly(libs.bundles.dpf)
-
-    // Federated catalog
-    runtimeOnly(libs.fc.core)
-    runtimeOnly(libs.fc.ext.api)
-
-    // Identity Hub
-    runtimeOnly(libs.ih.core)
-    runtimeOnly(libs.ih.ext.api)
-    runtimeOnly(libs.ih.ext.api.selfdescription)
-    runtimeOnly(libs.ih.core.verifier)
-    runtimeOnly(libs.ih.ext.credentials.jwt)
-    runtimeOnly(libs.ih.ext.verifier.jwt)
-}
-
-application {
-    mainClass.set("org.eclipse.edc.boot.system.runtime.BaseRuntime")
-}
-
 tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
     mergeServiceFiles()
     archiveFileName.set("connector.jar")
     dependsOn(distTar, distZip)
-    mustRunAfter(distTar, distZip)
+}
+tasks.withType<JavaCompile> {
+    options.isDebug = true
+    options.compilerArgs.add("-g")
 }
