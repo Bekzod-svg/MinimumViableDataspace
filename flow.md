@@ -26,12 +26,12 @@ sequenceDiagram
         Note left of C2: 2. Federated Catalog Discovery
         C2->>C2: Load nodes.properties:<br/>company1=http://company1:19194/protocol<br/>company3=http://company3:19194/protocol
         
-        C2->>C1: GET /protocol/catalog<br/>(with JWT token)
+        C2->>C1: POST /protocol/catalog<br/>(with JWT token)
         C1->>C1: Validate JWT via Keycloak JWKS
         C1->>C1: Apply catalog policy<br/>(check country claim)
         C1-->>C2: Return catalog entries
         
-        C2->>C3: GET /protocol/catalog<br/>(with JWT token)
+        C2->>C3: POST /protocol/catalog<br/>(with JWT token)
         C3->>C3: Validate JWT via Keycloak JWKS
         C3->>C3: Policy evaluation:<br/>Required: country=DE<br/>Token has: country=DE ✅
         C3-->>C2: Return catalog entries
