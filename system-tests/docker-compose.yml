@@ -20,7 +20,7 @@ services:
     environment:
       EDC_VAULT_FILE_PATH: /resources/vault.properties
       EDC_DSP_CALLBACK_ADDRESS: http://company1:19194/protocol
-      EDC_DATAPLANE_API_PUBLIC_BASEURL: http://company1:19291/public
+      EDC_DATAPLANE_API_PUBLIC_BASEURL: http://localhost:19291/public
       WEB_HTTP_PORT: 19191
       WEB_HTTP_PATH: /api
       WEB_HTTP_MANAGEMENT_PORT: 19193
@@ -53,6 +53,10 @@ services:
       EDC_NODES_FILE_PATH: /resources/nodes.properties
       EDC_LOGGING_LEVEL: DEBUG
       JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1044"
+      EDC_WEB_REST_CORS_ENABLED: "true"
+      EDC_WEB_REST_CORS_ORIGINS: "*"
+      EDC_WEB_REST_CORS_HEADERS: "origin,content-type,accept,authorization,x-api-key"
+      EDC_WEB_REST_CORS_METHODS: "GET,POST,DELETE,PUT,OPTIONS"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:19191/api/check/health"]
       interval: 20s
@@ -85,7 +89,7 @@ services:
     environment:
       EDC_VAULT_FILE_PATH: /resources/vault.properties
       EDC_DSP_CALLBACK_ADDRESS: http://company2:19194/protocol
-      EDC_DATAPLANE_API_PUBLIC_BASEURL: http://company2:19291/public
+      EDC_DATAPLANE_API_PUBLIC_BASEURL: http://localhost:19291/public
       WEB_HTTP_PORT: 19191
       WEB_HTTP_PATH: /api
       WEB_HTTP_MANAGEMENT_PORT: 19193
@@ -123,6 +127,11 @@ services:
       EDC_CATALOG_CACHE_EXECUTION_PERIOD_SECONDS: 120
       EDC_CATALOG_CACHE_PARTITION_NUM_CRAWLERS: 2
       JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1044"
+      EDC_WEB_REST_CORS_ENABLED: "true"
+      EDC_WEB_REST_CORS_ORIGINS: "*"
+      EDC_WEB_REST_CORS_HEADERS: "origin,content-type,accept,authorization,x-api-key"
+      EDC_WEB_REST_CORS_METHODS: "GET,POST,DELETE,PUT,OPTIONS"
+      EDC_EDR_STORE_CACHE_ENABLED: "true"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:19191/api/check/health"]
       interval: 20s
@@ -152,7 +161,7 @@ services:
     environment:
       EDC_VAULT_FILE_PATH: /resources/vault.properties
       EDC_DSP_CALLBACK_ADDRESS: http://company3:19194/protocol
-      EDC_DATAPLANE_API_PUBLIC_BASEURL: http://company3:19291/public
+      EDC_DATAPLANE_API_PUBLIC_BASEURL: http://localhost:19291/public
       WEB_HTTP_PORT: 19191
       WEB_HTTP_PATH: /api
       WEB_HTTP_MANAGEMENT_PORT: 19193
@@ -181,6 +190,10 @@ services:
       EDC_AGENT_IDENTITY_KEY: participant_id
       EDC_PARTICIPANT_ID: company3
       EDC_NODES_FILE_PATH: /resources/nodes.properties
+      EDC_WEB_REST_CORS_ENABLED: "true"
+      EDC_WEB_REST_CORS_ORIGINS: "*"
+      EDC_WEB_REST_CORS_HEADERS: "origin,content-type,accept,authorization,x-api-key"
+      EDC_WEB_REST_CORS_METHODS: "GET,POST,DELETE,PUT,OPTIONS"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:19191/api/check/health"]
       interval: 20s
