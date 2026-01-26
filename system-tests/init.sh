@@ -107,23 +107,25 @@ curl -X POST "http://company1:19193/management/v3/policydefinitions" \
     "@id": "germany-only-policy",
     "policy": {
       "@type": "Set",
-      "permission": [{
+      "permission": {
         "action": "use",
-        "constraint": {
+        "constraint": [
+        {
           "leftOperand": "country",
           "operator": {
             "@id": "odrl:eq"
           },
           "rightOperand": "DE"
         },
-        "constraint": {
+        {
           "leftOperand": "participantId",
           "operator": {
             "@id": "odrl:isPartOf"
           },
-          "rightOperand": "company1, company2, company3"
+          "rightOperand": "company2"
         }
-      }]
+        ]
+      }
     }
   }'
 
@@ -188,16 +190,25 @@ curl -X POST "http://company3:19193/management/v3/policydefinitions" \
     "@id": "germany-only-policy3",
     "policy": {
       "@type": "Set",
-      "permission": [{
+      "permission": {
         "action": "use",
-        "constraint": {
+        "constraint": [
+        {
           "leftOperand": "country",
           "operator": {
             "@id": "odrl:eq"
           },
           "rightOperand": "DE"
+        },
+        {
+          "leftOperand": "participantId",
+          "operator": {
+            "@id": "odrl:isPartOf"
+          },
+          "rightOperand": "company2"
         }
-      }]
+        ]
+      }
     }
   }'
 
