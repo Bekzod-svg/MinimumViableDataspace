@@ -1,0 +1,51 @@
+# ---------------------------------------------------------
+# 1. Image Configuration (The Missing Link)
+# This tells K3s exactly which Docker image to pull and run.
+# Replace with your actual Docker Hub or GitHub package URL.
+# ---------------------------------------------------------
+image:
+  repository: "bekzodnazarov346/edc" # <-- UPDATE THIS
+  tag: "v1.0.0"                                      # <-- UPDATE THIS
+  pullPolicy: IfNotPresent # Forces K3s to pull the latest version if you push updates
+
+# ---------------------------------------------------------
+# 2. Core Connector Configuration
+# ---------------------------------------------------------
+participantId: "consumer" 
+title: "Fraunhofer Cloud Connector"
+
+# ---------------------------------------------------------
+# 3. Networking & Callbacks
+# Tells the provider where to reply to you on the public internet.
+# ---------------------------------------------------------
+dspCallbackAddress: "https://dataspace.dai.isst.fraunhofer.de/protocol"
+
+# ---------------------------------------------------------
+# 4. Database Configuration
+# Overrides default chart passwords for the embedded Postgres.
+# ---------------------------------------------------------
+postgresql:
+  auth:
+    database: "edc"
+    username: "edc"
+    password: "YourStrongCloudPassword123!" # <-- CHANGE THIS
+
+# ---------------------------------------------------------
+# 5. Ingress Configuration (The Traffic Cop)
+# Routes external internet traffic into your specific connector ports.
+# ---------------------------------------------------------
+ingress:
+  enabled: true
+  className: "traefik" # K3s uses Traefik by default
+  hosts:
+    - host: "dataspace.dai.isst.fraunhofer.de"
+      paths:
+        - path: /management
+          pathType: Prefix
+          port: 29193
+        - path: /protocol
+          pathType: Prefix
+          port: 29194
+        - path: /public
+          pathType: Prefix
+          port: 29291
