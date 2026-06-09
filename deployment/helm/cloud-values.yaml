@@ -36,7 +36,12 @@ postgresql:
 # ---------------------------------------------------------
 ingress:
   enabled: true
-  className: "traefik" # K3s uses Traefik by default
+  className: "traefik"
+  annotations:
+    # This tells cert-manager to automatically get a cert for this ingress
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # Forces HTTP traffic to redirect to HTTPS
+    traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd
   hosts:
     - host: "dataspace.dai.isst.fraunhofer.de"
       paths:
@@ -49,3 +54,7 @@ ingress:
         - path: /public
           pathType: Prefix
           port: 29291
+  tls:
+    - secretName: edc-tls-cert # Cert-manager will save the certificate here
+      hosts:
+        - "dataspace.dai.isst.fraunhofer.de"
